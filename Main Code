@@ -1,0 +1,609 @@
+package hugeints;
+
+/**
+ *
+ * @author Paramveers PC
+ */
+
+ import java.util.Random;
+import java.lang.String;
+import java.util.Arrays;
+import java.lang.Throwable;
+
+
+public class HugeInteger {
+    int size;// declaring variables in HugeInteger
+    int[] huge_Integer;
+ public static void main(String[] args) {
+     ///TESTS   
+     String B="1";
+        HugeInteger a= new HugeInteger(B);
+        HugeInteger w= new HugeInteger("1000");
+        //for(int i=0;i<a.size;i++){
+        
+      // HugeInteger C= a.multiply(w);
+       
+       //HugeInteger C= a.add(w);
+       
+       HugeInteger C=a.subtract(w);
+       
+       //System.out.print(a.compareTo(w));
+      
+       System.out.print(C.toString());
+     // System.out.print("\n"+16/10);
+      //System.out.print(a.compareTo(w));
+        //System.out.print("\n"+a.size);
+       // }
+    }
+ 
+    public HugeInteger(String val) throws IllegalArgumentException{// first constructer
+        
+       if(val.charAt(0)=='-'){
+        for(int i=1;i<val.length();i++){
+        if(val.charAt(i)<'0'||val.charAt(i)>'9'){
+            throw new IllegalArgumentException("invalid string");//makes sure only numbers are allowed
+        }
+        }
+       }
+        else{
+                for(int i=0;i<val.length();i++){
+                if(val.charAt(i)<'0'||val.charAt(i)>'9'){
+                throw new IllegalArgumentException("invalid string");
+                }
+                }
+    }
+//HugeInteger constructor1=null;
+        this.size=val.length();//sets size variable to the length of the input string
+        this.huge_Integer= new int [this.size];//new array of size "size" is made
+        int b=0; 
+        
+        if(val.charAt(0)== '-'){//how to index array and see if there is a negative??
+           this.size=val.length()-1;
+            int a = Integer.parseInt(Character.toString(val.charAt(1)))*-1;
+           this.huge_Integer[0]= a;
+           ;
+           for(int i=1;i<this.size;i++){
+           int number;
+           number = Integer.parseInt(Character.toString(val.charAt(i+1)));//converts string to an integer
+           this.huge_Integer[i]=number;//fills array with numbers in order 
+           }}
+        else{
+           for(int i=0;i<this.size;i++){
+           int number;
+          String q=Character.toString(val.charAt(i));//indexes string
+           number = Integer.parseInt(q);//converts string to an integer
+           this.huge_Integer[i]=number;//fills array with numbers in order
+                   } 
+        } 
+    }//do i need to throw exception?
+                   
+         
+   
+    
+    public HugeInteger(int n)throws IllegalArgumentException {
+        //HugeInteger constructor2=null;
+       int a=1;
+        if(n<1){
+             throw new IllegalArgumentException("input must be a number greater or equal to 1");
+        }
+        this.size=n;//sets size to input 
+        this.huge_Integer= new int[n];//creates space for array with size n 
+       //Random rand_int;//random integer generation
+        //rand_int = new Random();
+       // int a = 1+rand_int.nextInt(9);//makes sure first number is a non 
+       int sign=(int)(Math.random()* 0 + 1);
+       a =(int)(Math.random()* 1 + 9);
+       if (sign==0)
+           a=a;
+       if(sign==1)
+           a=a*-1;
+        this.huge_Integer[0]=a;
+        //for(int i=1;i<n;n++){//fills the rest of the array with integers 0-9
+        int counter =1;
+        while( counter<n){
+            //this.huge_Integer[i]=0+rand_int.nextInt(10);
+            this.huge_Integer[counter]= (int)(Math.random()*10);
+            counter++;
+        }
+        }
+    
+    
+    public HugeInteger add(HugeInteger h){
+        HugeInteger sum_array;
+        //is there a way to make one if statement for both  
+        if(this.huge_Integer[0]>=0&&h.huge_Integer[0]<0){
+           h.huge_Integer[0]=h.huge_Integer[0]*-1;
+           sum_array=this.subtract(h);
+           return sum_array;
+       }
+        if(this.huge_Integer[0]<0&&h.huge_Integer[0]<0){
+           h.huge_Integer[0]= h.huge_Integer[0]*-1;
+           this.huge_Integer[0]= this.huge_Integer[0]*-1;
+           sum_array=this.add(h);
+           sum_array.huge_Integer[0]= sum_array.huge_Integer[0]*-1;
+           return sum_array;
+       }
+        if(this.huge_Integer[0]<0&&h.huge_Integer[0]>=0){
+            this.huge_Integer[0]=this.huge_Integer[0]*-1;
+            sum_array=h.subtract(this);
+            //sum_array.huge_Integer[0]=sum_array.huge_Integer[0]*-1;
+            return sum_array;
+        }
+        
+        if(h.size>this.size){// sets size of the new sum  array to the size of the bigger array
+            int a=h.size;
+            int temp []= new int [a];
+            for(int i=0;i<a-this.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                temp[i]=0;
+            }
+            for(int i=a-this.size;i<a;i++){//fills sig digs 
+                temp[i]=this.huge_Integer[i-(a-this.size)];
+            }
+            this.size=a;//changes size of this array
+            this.huge_Integer=new int [a];
+            for(int i=0;i<a;i++){
+                this.huge_Integer[i]=temp[i];//copies temporary array into this
+            }
+        }
+        if (h.size<this.size) {
+            int a=this.size;//variable a is give to the size of this
+            int temp []= new int [a];//new temp array of size a is defined 
+            for(int i=0;i<a-h.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                temp[i]=0;
+            }int counter=0;
+            for(int i=a-h.size;i<a;i++){//fills sig digs 
+                temp[i]=h.huge_Integer[counter];
+                counter++;
+            }
+            h.size=a;//changes size of this array
+            h.huge_Integer=new int[a];
+            for(int i=0;i<a;i++){
+                h.huge_Integer[i]=temp[i];
+            
+        }
+        }  
+        
+        if(this.size==h.size){//if numbers  are of same size it checks if the sum will have a carry 
+            /*int g=0;
+            int p=0;
+            if(this.huge_Integer[g]=='-')
+                g=1;
+            if(h.huge_Integer[p]=='-')
+                p=1;*///this block is to take in account a negative sign 
+        }
+        int a = this.size;
+               
+       //int adjuster =this.huge_Integer[0]+h.huge_Integer[0];
+       // adjuster=adjuster-10;
+       // if(adjuster>=0){
+          //  a++;}
+       
+        
+        int carry=0;
+        int b=0;
+        //int placeholder[]=new int [a];
+        for(int i=0;i<a;i++){// forloop to calculate sum for each place
+            int sum =this.huge_Integer[a-1-i]+h.huge_Integer[a-1-i]+carry;//calculation of sum
+            int sum1= sum%10;//gives the digit for the given place
+            sum1=sum1;//starts from right must digits
+            if ((sum-10)>=0){//checks if there is a carry at the end of the addition
+                carry=1;
+           }
+            else
+                carry=0;
+        }
+        if (carry==1){//if carry exists the size of the sum array is increased by 1 to acccount fo the carry 
+            b=a+1;
+           }
+        if(carry==0){
+            b=a;
+        }
+        
+        carry=0;
+        int placeholder[]=new int [b];
+        for(int i=0;i<a;i++){// forloop to calculate sum 
+            int sum =this.huge_Integer[a-i-1]+h.huge_Integer[a-i-1]+carry;
+            int sum1= sum%10;//gives the digit for the given place
+            placeholder[b-1-i]=sum1;//starts from right must digits
+            if ((sum-10)>=0){
+                carry=1;
+           }else
+                carry=0;
+        }
+        if(b!=a){
+       placeholder[0]=carry;}
+        
+        String F="";// makes a string of the hugeInteger array
+        if(placeholder[0]==0){
+            if(placeholder.length==1){//special case of 0+0
+                F="0";
+            }
+            else
+            for(int i=1;i<b;i++){
+                 F= F + Integer.toString(placeholder[i]);
+        }
+        }
+        else{for(int i=0;i<b;i++){
+            F= F + Integer.toString(placeholder[i]);
+    }
+    }
+        sum_array=new HugeInteger(F);
+        
+       
+    return sum_array;}
+    
+    public String toString(){
+    int x=this.size; 
+    String f =  "";
+    
+    for(int i=0;i<x;i++)
+    {
+        f = f + Integer.toString(this.huge_Integer[i]);
+    }
+    return f;
+    }
+    public int compareTo(HugeInteger h){
+        int bool=7;//intializes the variable 
+        if(this.huge_Integer[0]>=0&&h.huge_Integer[0]>=0){//compares if both hugeints are positive
+        if (this.size>h.size)
+            bool= 1;
+        if(this.size<h.size)
+            bool= -1;
+        int i=0;
+        if (this.size==h.size){
+            for(i=0;i<this.size;i++){
+                if(this.huge_Integer[i]==h.huge_Integer[i])
+                bool=0 ;
+            if(this.huge_Integer[i]>h.huge_Integer[i])
+                bool= 1;
+            if(this.huge_Integer[i]<h.huge_Integer[i])
+                bool =-1;
+            }
+        }
+        }
+         if(this.huge_Integer[0]<=0&&h.huge_Integer[0]<=0){//compares if both negative
+        if (this.size<h.size)
+            bool= 1;
+        if(this.size>h.size)
+            bool= -1;
+        int i=0;
+        if (this.size==h.size){
+            for(i=0;i<this.size;i++){
+                if(this.huge_Integer[this.size-1-i]==h.huge_Integer[h.size-i-1]){
+                bool=0 ;}
+                if(this.huge_Integer[this.size-1-i]*-1>-1*h.huge_Integer[h.size-i-1]){
+                bool= -1;}
+                if(this.huge_Integer[this.size-1-i]*-1<-1*h.huge_Integer[h.size-i-1]){
+                bool =1;}
+           }   
+        }
+         }
+         if (this.huge_Integer[0]<=0&&h.huge_Integer[0]>0){// compares if have different signs 
+             bool=-1;
+         }
+        if (this.huge_Integer[0]>=0&&h.huge_Integer[0]<0){
+             bool=1;
+         }
+         return  bool;
+    }
+    
+    public HugeInteger subtract(HugeInteger h){//subtract method
+        HugeInteger diff;
+        HugeInteger zero=new HugeInteger("0") ;
+        if(this.compareTo(h)==0){//if the numbers are the same gives 0
+            diff=zero;
+            return diff;}
+        
+       if(this.huge_Integer[0]>=0&&h.huge_Integer[0]<0){//if this is positive and h is negative the operation is the same as addition 
+           h.huge_Integer[0]=h.huge_Integer[0]*-1;//multiplies negative to make it positive
+           diff=this.add(h);
+           return diff;
+       }
+        if(this.huge_Integer[0]<0&&h.huge_Integer[0]<0){//if both negative it is  same as adding magnitude of both and multiplying by negative
+           h.huge_Integer[0]= h.huge_Integer[0]*-1;
+           diff=h.add(this);
+           return diff;
+       }
+        if(this.compareTo(h)==-1){
+                diff=h.subtract(this);
+                diff.huge_Integer[0]=diff.huge_Integer[0]*-1;
+                return diff;}
+        
+        if(this.huge_Integer[0]<0&&h.huge_Integer[0]>=0){//this is same as adding magnitude and mulitplying by negative 1
+            this.huge_Integer[0]=this.huge_Integer[0]*-1;
+            h.huge_Integer[0]=h.huge_Integer[0]*-1;
+            diff=this.subtract(h);
+            return diff;
+        }
+        
+ 
+         if(h.size>this.size){// sets size of the new sum  array to the size of the bigger array
+            int a=h.size;
+            int temp []= new int [a];
+            for(int i=0;i<a-this.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                temp[i]=0;
+            }
+            for(int i=a-this.size;i<a;i++){//fills sig digs 
+                temp[i]=this.huge_Integer[i-(a-this.size)];
+            }
+            this.size=a;//changes size of this array
+            this.huge_Integer=new int [a];
+            for(int i=0;i<a;i++){
+                this.huge_Integer[i]=temp[i];//copies temporary array into this
+            }
+        }
+        if (h.size<this.size) {
+            int a=this.size;//variable a is give to the size of this
+            int temp []= new int [a];//new temp array of size a is defined 
+            for(int i=0;i<a-h.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                temp[i]=0;
+            }int counter=0;
+            for(int i=a-h.size;i<a;i++){//fills sig digs 
+                temp[i]=h.huge_Integer[counter];
+                counter++;
+            }
+            h.size=a;//changes size of this array
+            h.huge_Integer=new int[a];
+            for(int i=0;i<a;i++){
+                h.huge_Integer[i]=temp[i];
+            
+        }
+        }
+        int i;
+        if(h.size==this.size){}
+            int carry=0;
+             String F="";
+            int diffarray []=new int[h.size];// array to store difference 
+            
+            
+            for(i=0;i<this.size;i++){
+              int L =this.huge_Integer[this.size-1-i]-h.huge_Integer[this.size-1-i]-carry;
+              if(L<0){
+                  L=L+10;
+                  carry=1;
+              }
+              else{
+                  carry=0;
+              }
+                diffarray[this.size-1-i]=L;
+            }
+            int index=0;
+            int tracker=0;
+            for(index=0;index<this.size;index++){
+                
+                if(diffarray[index]!=0){
+                    break;
+                }tracker++;
+            }
+            int sizeaz=this.size-tracker;
+           int newdiffarray[]= new int [sizeaz];
+           for(i=0;i<sizeaz;i++){
+               newdiffarray[i]=diffarray[i+tracker];
+           }
+          
+          for(i=0;i<sizeaz;i++){
+              F=F+Integer.toString(newdiffarray[i]);
+          }
+        
+           
+        diff= new HugeInteger(F);
+      
+        
+           return diff;
+    }
+    public HugeInteger multiply( HugeInteger h){
+       int sign = 0;
+        HugeInteger prod;
+       if(this.huge_Integer[0]<0&&h.huge_Integer[0]<0){
+           sign=1;
+            this.huge_Integer[0]=this.huge_Integer[0]*-1;
+            h.huge_Integer[0]=h.huge_Integer[0]*-1;
+       }
+       if(this.huge_Integer[0]<0&&h.huge_Integer[0]>0){ 
+            sign=-1;
+            this.huge_Integer[0]=this.huge_Integer[0]*-1;
+       }
+       if(h.huge_Integer[0]<0&&this.huge_Integer[0]>0){
+            sign=-1;
+            h.huge_Integer[0]=h.huge_Integer[0]*-1;
+       }
+       if(this.huge_Integer[0]==0&&this.size==1){
+           return prod=new HugeInteger("0");
+       }
+       
+       if(h.huge_Integer[0]==0&&h.size==1){
+           return prod=new HugeInteger("0");
+       }
+       
+       int a=this.size+h.size;// max size of the pruduct
+       
+            int this_temp []= new int [a];
+            for(int i=0;i<a-this.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                this_temp[i]=0;
+            }
+            for(int i=a-this.size;i<a;i++){//fills sig digs 
+                this_temp[i]=this.huge_Integer[i-(a-this.size)];
+            }
+            
+            this.huge_Integer=new int [a];
+            for(int i=0;i<a;i++){
+                this.huge_Integer[i]=this_temp[i];//copies temporary array into this
+            }
+        
+       
+            int h_temp []= new int [a];//new temp array of size a is defined 
+            for(int i=0;i<a-h.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                h_temp[i]=0;
+            }int counter=0;
+            for(int i=a-h.size;i<a;i++){//fills sig digs 
+                h_temp[i]=h.huge_Integer[counter];
+                counter++;
+            }
+          
+            h.huge_Integer=new int[a];
+            for(int i=0;i<a;i++){
+                h.huge_Integer[i]=h_temp[i];
+            
+        }
+          
+        
+        
+        int [] prodarray= new int[a];
+        int factor;
+        
+        if(this.size>=h.size){
+        /*for(int i=0;i<a;i++){
+            int carry=0;
+            factor=(int)Math.pow((double)10, i);
+            if(i==0){
+                factor=1;   
+                        }
+            int j;
+            for( j=0;j<a;j++){
+            
+            
+              int d =h.huge_Integer[a-i-1]*this.huge_Integer[a-j-1]*factor+carry;
+              int D=d%10;
+              carry=d/factor;
+              prodarray[a-1-i]=D+prodarray[a-1-i];
+        }*/    
+         
+            for(int i=0;i<a;i++){
+                int carry=0;
+               // factor=(int)Math.pow((double)10, i);
+            for(int j=0;j<a;j++){
+              int d =h.huge_Integer[a-i-1]*this.huge_Integer[a-j-1]+carry;
+              int D=d%10;
+             // factor=(int)Math.pow((double)10, i);
+              carry=d/10;
+              prodarray[a-1-j]=D+prodarray[a-1-j];
+             // carry=prodarray[a-1-i]/10;
+             
+        }
+        }
+        }
+        if(this.size<h.size){ int carry=0;
+        for(int i=0;i<a;i++){
+            
+       
+            for(int j=0;j<a;j++){
+              int d =h.huge_Integer[a-j-1]*this.huge_Integer[a-i-1]+carry;
+              int D=d%10;
+              carry=d/10;
+              prodarray[a-1-j]=D+prodarray[a-1-j];
+        }     
+         
+        }
+        }
+       // prodarray[0]=prodarray[0]*sign;
+        String F="";
+        if(prodarray[0]==0&&prodarray.length==0){
+            F="0";
+            return prod=new HugeInteger(F);
+        }
+        if(prodarray[0]!=0)
+        {for(int i=0;i<a;i++){
+              F=F+Integer.toString(prodarray[i]);
+        } prod= new HugeInteger(F);
+           return prod;}
+        int x=0;
+        
+         if(prodarray[0]==0){
+        for(int i=0;i<a;i++){
+              if(prodarray[i]!=0){
+                  break;
+              }
+              x++;
+          }}
+        for(int i=x;i<a;i++){
+             F=F+Integer.toString(prodarray[i]);
+            
+           
+        }
+         prod= new HugeInteger(F);
+         prod.huge_Integer[0]=prod.huge_Integer[0]*sign;
+       return prod;
+    }
+}
+   /* public HugeInteger prod( HugeInteger h){
+        int sign=1;
+        HugeInteger prod=new HugeInteger("0");
+       if(this.huge_Integer[0]<0&&h.huge_Integer[0]<0){
+            sign=1;
+       }
+       if(this.huge_Integer[0]<0||h.huge_Integer[0]<0){
+            sign=-1;
+       }
+       if(this.huge_Integer[0]==0&&this.size==1){
+           return prod=new HugeInteger("0");
+       }
+       
+       if(h.huge_Integer[0]==0&&h.size==1){
+           return prod=new HugeInteger("0");
+       }
+       
+       int a=this.size+h.size;// max size of the pruduct
+       
+            int this_temp []= new int [a];
+            for(int i=0;i<a-this.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                this_temp[i]=0;
+            }
+            for(int i=a-this.size;i<a;i++){//fills sig digs 
+                this_temp[i]=this.huge_Integer[i-(a-this.size)];
+            }
+            
+            this.huge_Integer=new int [a];
+            for(int i=0;i<a;i++){
+                this.huge_Integer[i]=this_temp[i];//copies temporary array into this
+            }
+        
+       
+            int h_temp []= new int [a];//new temp array of size a is defined 
+            for(int i=0;i<a-h.size;i++){//creates a temporary array of the size of the larger number and sets all non-sig digs to 0
+                h_temp[i]=0;
+            }int counter=0;
+            for(int i=a-h.size;i<a;i++){//fills sig digs 
+                h_temp[i]=h.huge_Integer[counter];
+                counter++;
+            }
+          
+            h.huge_Integer=new int[a];
+            for(int i=0;i<a;i++){
+                h.huge_Integer[i]=h_temp[i];
+            
+        }
+          
+        
+        
+        int [] prodarray= new int[a];
+        int factor;
+       String ting;
+       int sum3=0;
+       HugeInteger prod1=new HugeInteger("0");
+        HugeInteger prod2=new HugeInteger("0");
+        if(this.size>=h.size)
+           
+            {for(int i=0;i<a;i++){ 
+                ting="";
+                factor=(int)Math.pow((double)10, i);
+                int carry=0;
+                    for(int j=0;j<a;j++){
+                        int d =h.huge_Integer[a-i-1]*this.huge_Integer[a-j-1];
+                        int D=d+carry;
+                            D=d%10;
+                        carry=D/10;
+                        sum3=D;}
+                         //prod1= prod1.add(ans); 
+                    
+                    sum3=sum3*factor;
+                    ting=ting+sum3;
+                     prod2 =new HugeInteger(ting); }
+            
+            prod=prod2.add(prod);}
+           
+         
+        
+       
+       return prod;     
+        }
+}*/
